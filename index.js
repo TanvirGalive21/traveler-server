@@ -21,6 +21,7 @@ async function run() {
         await client.connect();
         const database = client.db('travel-agency');
         const serviceCollection = database.collection('services');
+        const addbookingCollection = database.collection('addbooking');
 
 
        // GET services API
@@ -28,7 +29,23 @@ async function run() {
             const cursor = serviceCollection.find();
             const services = await cursor.toArray();
             res.send(services);
+            
        })
+
+       // add booking API
+       app.post("/addbooking", async (req, res) => {
+        console.log(req.body);
+        const result = await addbookingCollection.insertOne(req.body);
+        res.send(result);
+      });
+
+
+      app.get("/addbooking", async (req, res) => {
+        const result = await addbookingCollection.find({}).toArray();
+        res.send(result);
+        console.log(result);
+      });
+
 
     }
     finally {
